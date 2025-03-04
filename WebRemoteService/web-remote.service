@@ -1,0 +1,17 @@
+[Unit]
+Description=Web Remote
+After=dbus.socket
+Requires=dbus.socket
+
+[Service]
+Type=simple
+User=homehp
+Group=homehp
+WorkingDirectory=/usr/share/WebRemoteService
+ExecStart=/usr/share/WebRemoteService/WebRemoteService
+Environment="PULSE_SERVER=unix:/run/user/1000/pulse/native"
+Environment="DISPLAY=:0"
+Restart=once
+
+[Install]
+WantedBy=multi-user.target

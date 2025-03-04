@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "xDuIEzx+ja4=",
+  "success": true,
+  "projectFilePath": "/home/homehp/Projects/web-remote/LinuxMediaControl/LinuxMediaControl.csproj",
+  "expectedPackageFiles": [
+    "/home/homehp/.nuget/packages/tmds.dbus/0.21.2/tmds.dbus.0.21.2.nupkg.sha512"
+  ],
+  "logs": []
+}

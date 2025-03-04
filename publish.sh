@@ -1,0 +1,1 @@
+dotnet publish WebSample/WebSample.csproj -o ./PublishOutput/web-remote

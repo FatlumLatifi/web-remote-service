@@ -1,0 +1,17 @@
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/appsettings.json
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/WebRemoteService.pdb
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/favicon.ico
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/index.html
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/scripts/audiomedia.js
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/scripts/main.js
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/scripts/settings.js
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/scripts/touchpad.js
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/sound.svg
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/style.css
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/wwwroot/test.html
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/web-remote.service
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/WebRemote.pdb
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/LinuxInput.pdb
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/LinuxMediaControl.pdb
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/WebRemote.Models.pdb
+/home/homehp/Projects/web-remote/WebRemoteService/bin/Debug/net8.0/linux-x64/publish/WebRemoteService
