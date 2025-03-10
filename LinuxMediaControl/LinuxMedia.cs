@@ -131,9 +131,6 @@ public class LinuxMedia : IWebMedia, IDisposable
         Audio.SetVolume(value);
     }
 
- 
-
-
     public void Dispose()
     {
         _connection.Dispose();

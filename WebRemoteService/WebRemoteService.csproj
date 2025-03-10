@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WebRemote\WebRemote.csproj" />
     <Content Include="web-remote.service" CopyToPublishDirectory="PreserveNewest" LinuxFileMode="1755">
-      <LinuxPath>/etc/systemd/system/web-remote.service</LinuxPath>
+      <LinuxPath>/etc/systemd/user/web-remote.service</LinuxPath>
     </Content>
   
     <RpmDotNetDependency Remove="@(RpmDotNetDependency)" />
