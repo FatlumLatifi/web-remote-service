@@ -17,34 +17,38 @@ public static class WebRemoteApplication
 {
     public static WebApplication CreateWebApplication(WebApplicationBuilder? builder)
     {
-        if (builder is null) { builder = WebApplication.CreateBuilder(); }
+        if (builder is null) 
+        {
+             builder = WebApplication.CreateBuilder(); 
+        }
+        builder.Services.AddSingleton<IWebMedia, LinuxMedia>();
+        builder.Services.AddSingleton<IWebRemoteServer, X11WebRemoteServer>();
+
         var app = builder.Build();
         app.UseStaticFiles();
         app.UseDefaultFiles();
         app.UseWebSockets();
-        var lm = new LinuxMedia();
 
-        app.MapGet("/ws", async (HttpContext context, CancellationToken ct) =>
+        app.MapGet("/ws", async (HttpContext context, CancellationToken ct, [FromServices] IWebMedia webMedia, [FromServices] IWebRemoteServer webRemoteServer) =>
         {
             if (context.WebSockets.IsWebSocketRequest)
             {
                 using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
                 Console.WriteLine("Sending Media audio message");
                  
-                    await lm.CheckMediaPlayersAsync();
-                    await webSocket.SendTextAsUTF8Async(JsonSerializer.Serialize<AudioRemoteMessage>(lm.GetAudioMessage())); 
+                    await webMedia.CheckMediaPlayersAsync();
+                    await webSocket.SendTextAsUTF8Async(JsonSerializer.Serialize<AudioRemoteMessage>(webMedia.GetAudioMessage())); 
                     Console.WriteLine("Sent audio message");
                 
                 byte[] buffer = new byte[128];
                 //using (X11Mouse mouse = new())
-                using (IWebRemoteServer server = new X11WebRemoteServer())
-                {
+              
                 reread:
                     if (webSocket.State is not WebSocketState.Open) { webSocket.Dispose(); return; }
                     try
                     {
                         WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, ct); // System.Threading.CancellationToken.None);
-                        bool shouldReRead = webSocket.HandleMessage(buffer, result, server);
+                        bool shouldReRead = webSocket.HandleMessage(buffer, result, webRemoteServer);
                         if (shouldReRead) { goto reread; }
                     }
                     catch (Exception ex)
@@ -52,50 +56,50 @@ public static class WebRemoteApplication
                         Console.WriteLine(ex.Message);
                     }
                 }
-            }
-        });
-
-        app.MapGet("/audio", async (HttpContext context) => 
-        {
-            try{
-                int mediaPlayersCount = await lm.CheckMediaPlayersAsync();
-                return Results.Json<AudioRemoteMessage>(lm.GetAudioMessage());
-            }
-            catch(Exception ex){ return Results.Problem(ex.Message);}
             
         });
 
-        app.MapPost("/audio/volume/{newvolume}", (HttpContext context, [FromRoute] int newvolume) => 
+        app.MapGet("/audio", async (HttpContext context, [FromServices] IWebMedia webMedia) => 
+        {
+            try{
+                int mediaPlayersCount = await webMedia.CheckMediaPlayersAsync();
+                return Results.Json<AudioRemoteMessage>(webMedia.GetAudioMessage());
+            }
+            catch(Exception ex){ return Results.Problem(ex.Message); }
+            
+        });
+
+        app.MapPost("/audio/volume/{newvolume}", (HttpContext context, [FromRoute] int newvolume, [FromServices] IWebMedia webMedia) => 
         {
             try 
             {
-                lm.SetVolume(newvolume);
+                webMedia.SetVolume(newvolume);
                 return Results.Ok();
             }
             catch (Exception ex) { return Results.Problem(ex.Message); }
         });
 
-        app.MapPost("/audio", async (HttpContext context) => 
+        app.MapPost("/audio", async (HttpContext context, [FromServices] IWebMedia webMedia) => 
         {
             try{
             MediaControlMessage? mcm = await context.Request.ReadFromJsonAsync<MediaControlMessage?>();
             if (mcm is not null)
             {
-                if (lm.ChangeSelectedMediaPlayer(mcm.name) is false) { return Results.NotFound($"{mcm.name} not found or might be closed.");}
+                if (webMedia.ChangeSelectedMediaPlayer(mcm.name) is false) { return Results.NotFound($"{mcm.name} not found or might be closed.");}
                 switch(mcm.action)
                 {
                     case "play":
                     case "pause":
-                        lm.PlayPause();
+                        webMedia.PlayPause();
                         break;
                     case "next":
-                        lm.Next();
+                        webMedia.Next();
                         break;
                     case "previous":
-                        lm.Previous();
+                        webMedia.Previous();
                         break;
                     case "stop":
-                        lm.Stop();
+                        webMedia.Stop();
                         break;
                     default:
                         return Results.BadRequest($"Action: \"{mcm.action}\" does not exist");   

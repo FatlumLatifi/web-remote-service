@@ -19,6 +19,13 @@ export class WebRemote extends HTMLElement {
         this.reconnectButton.onclick = () =>
         {
             WebRemote.webSocket = new WebSocket(`ws://${window.location.host}/ws`);
+            this.reconnectButton.querySelector("svg").toggleAttribute("spin", true);
+            setTimeout(
+                ()=> {
+                    this.setStatusColor(); 
+                    this.reconnectButton.querySelector("svg").toggleAttribute("spin", false);
+                }, 
+            1000);
         };
     }
 
@@ -29,18 +36,20 @@ export class WebRemote extends HTMLElement {
             case WebSocket.CLOSING:
                 this.socketStatus.setAttribute("fill", "orange");
                 this.reconnectButton.style.display = "none";
-                break;
+                setTimeout(()=>this.setStatusColor(), 1000);
+                return;
             case WebSocket.OPEN:
                 this.socketStatus.setAttribute("fill", "green");
                 this.reconnectButton.style.display = "none"; 
-                break;
+                return;
             case WebSocket.CLOSED:
                 this.socketStatus.setAttribute("fill", "red");
                 this.reconnectButton.style.display = "block";
-                break;
+                return;
             default:
                 this.socketStatus.setAttribute("fill", "transparent");
                 this.reconnectButton.style.display = "block";
+                return;
         }
     }
 

@@ -23,7 +23,9 @@ public interface IWebRemoteMouse
 
 public interface IWebMedia
 {
-       public AudioRemoteMessage GetAudioMessage();
+    Task<int> CheckMediaPlayersAsync();
+    bool ChangeSelectedMediaPlayer(string name);
+    public AudioRemoteMessage GetAudioMessage();
     void SetVolume([Range(0,100)]int value);
     void PlayPause();
     void Previous();

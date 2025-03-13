@@ -11,7 +11,6 @@ public class LinuxMedia : IWebMedia, IDisposable
 
     public LinuxMedia()
     {
-        Audio = new();
         _connection = Connection.Session;
         MediaPlayers = new();
     }
@@ -34,10 +33,9 @@ public class LinuxMedia : IWebMedia, IDisposable
                 if (service.StartsWith("org.mpris.MediaPlayer2."))
                 {
                    var mediaPlayerRoot = _connection.CreateProxy<IMediaPlayerRoot>(service, "/org/mpris/MediaPlayer2");
-                    var properties = await mediaPlayerRoot.GetAllAsync();
-                    if (properties["Identity"]?.ToString() is not null && (MediaPlayers.Exists(x=> x.Item1 == properties["Identity"].ToString()) == false))
+                   string identity = await mediaPlayerRoot.GetAsync<string>("Identity");
                     {
-                        MediaPlayers.Add(new (properties["Identity"].ToString()!, _connection.CreateProxy<IMediaPlayer>(service, "/org/mpris/MediaPlayer2")));
+                        MediaPlayers.Add(new (identity, _connection.CreateProxy<IMediaPlayer>(service, "/org/mpris/MediaPlayer2")));
                     }
                     count++;
                 }
@@ -46,8 +44,7 @@ public class LinuxMedia : IWebMedia, IDisposable
         }
         return count;
     }
-    public AudioControl Audio { get; private set; }
-
+  
     private Connection _connection;
     public List<(string, IMediaPlayer)> MediaPlayers;
 
@@ -71,7 +68,10 @@ public class LinuxMedia : IWebMedia, IDisposable
 
     public AudioRemoteMessage GetAudioMessage()
     {
-       return new AudioRemoteMessage((int)Audio.GetVolume(), MediaPlayers.Select(players=> players.Item1).ToArray());
+        AudioControl Audio = new();
+        AudioRemoteMessage message = new(Audio.Volume, MediaPlayers.Select(players=> players.Item1).ToArray());
+        Audio.Dispose();
+        return message;
     }
 
 
@@ -80,12 +80,8 @@ public class LinuxMedia : IWebMedia, IDisposable
         return GetPlaybackStatusAsync(player).Result;
     }
 
-    public async Task<string?> GetPlaybackStatusAsync(IMediaPlayer player)
-    {
-        var properties = await player.GetAllAsync();
-        Console.WriteLine("Properties Count" + properties.Count.ToString());
-        return properties["PlaybackStatus"].ToString();
-    }
+    public async Task<string?> GetPlaybackStatusAsync(IMediaPlayer player) => await player.GetAsync<string?>("PlaybackStatus");
+    
 
     public async void Next()
     {
@@ -128,12 +124,13 @@ public class LinuxMedia : IWebMedia, IDisposable
     }
     public void SetVolume([Range(0, 100)] int value)
     {
-        Audio.SetVolume(value);
+        AudioControl Audio = new();
+        Audio.Volume = value;
+        Audio.Dispose();
     }
 
     public void Dispose()
     {
         _connection.Dispose();
-        Audio.Dispose();
     }
 }

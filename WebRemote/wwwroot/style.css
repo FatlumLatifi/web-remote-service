@@ -5,7 +5,7 @@ html, body, main { margin: 0; padding: 0;  max-width:100vw;  height: 100vh; max-
     --main-light: azure;
 }
 
-main[theme=dark]
+main
 {
     background-color: var(--main-dark);
     color: var(--main-light);
@@ -26,7 +26,17 @@ web-remote
         grid-template-columns: 1fr 1fr;
         height: 10vh;
         padding: 5px;
-    }    
+    }
+    & button[reconnect]
+    {
+        &> svg { stroke: var(--main-light); }
+        & > svg[spin] { animation: spin 1s linear 0s 5; }
+    }   
+}
+
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
 }
     
 
@@ -167,3 +177,6 @@ audio-media
         & > svg { stroke: var(--main-light); }
     }
 }
+
+
+html { height: 100vh; overflow: hidden; }

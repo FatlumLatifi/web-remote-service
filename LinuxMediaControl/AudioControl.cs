@@ -1,6 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
 
+
+/// <summary>
+/// Uses libasound.so.2 to control audio volume
+/// This class might prevent other apps from accessing audio mixer, the private _handle and _elem is the cause.
+/// </summary>
 public class AudioControl : IDisposable
 {
     private const string ALSA_LIB = "libasound.so.2";
@@ -97,31 +102,28 @@ public class AudioControl : IDisposable
         snd_mixer_selem_get_playback_volume_range(_elem, out long minVolume, out MaxVolume);
     }
 
-    public void SetVolume(long volume)
-    {
-        if (_elem == IntPtr.Zero)
-        {
-            Console.WriteLine("Mixer find error");
-            snd_mixer_close(_handle);
-            return;
-        }
-        // Set volume
-        long setVolume = volume * MaxVolume / 100;
-        snd_mixer_selem_set_playback_volume_all(_elem, setVolume);
-    }
 
-    public int GetVolume()
-    {
+    public int Volume 
+    { get {
         if (_elem == IntPtr.Zero)
         {
             Console.WriteLine("Mixer find error");
             snd_mixer_close(_handle);
             return -1;
         }
-        // Get volume
         snd_mixer_selem_get_playback_volume(_elem, 0, out long volume);
-        
-        return (int)(100*volume/MaxVolume);
+         return (int)(100*volume/MaxVolume);
+    } set {
+         if (_elem == IntPtr.Zero)
+        {
+            Console.WriteLine("Mixer find error");
+            snd_mixer_close(_handle);
+            return;
+        }
+        // Set volume
+        long setVolume = value * MaxVolume / 100;
+        snd_mixer_selem_set_playback_volume_all(_elem, setVolume);
+    }
     }
 
     public void Dispose()

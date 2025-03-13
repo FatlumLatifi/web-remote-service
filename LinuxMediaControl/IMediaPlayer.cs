@@ -14,7 +14,13 @@ public interface IMediaPlayer : IDBusObject
     Task PreviousAsync();
     Task StopAsync();
    Task<IDictionary<string, object>> GetAllAsync();
+
+   Task<T> GetAsync<T>(string prop);
+   Task SetAsync(string prop, object val);
+
 }
+
+
 
 
 
@@ -23,6 +29,9 @@ public interface IMediaPlayer : IDBusObject
     [DBusInterface("org.mpris.MediaPlayer2")]
     public interface IMediaPlayerRoot : IDBusObject
     {
+         Task<T> GetAsync<T>(string prop);
+   Task SetAsync(string prop, object val);
+        
         Task<IDictionary<string, object>> GetAllAsync();
     }
 
