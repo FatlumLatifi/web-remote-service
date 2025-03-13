@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
-using LinuxMediaControl;
 using Tmds.DBus;
 using WebRemote.Models;
 
@@ -35,6 +33,7 @@ public class LinuxMedia : IWebMedia, IDisposable
                    var mediaPlayerRoot = _connection.CreateProxy<IMediaPlayerRoot>(service, "/org/mpris/MediaPlayer2");
                    string identity = await mediaPlayerRoot.GetAsync<string>("Identity");
                     {
+                        
                         MediaPlayers.Add(new (identity, _connection.CreateProxy<IMediaPlayer>(service, "/org/mpris/MediaPlayer2")));
                     }
                     count++;
