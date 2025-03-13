@@ -1,7 +1,8 @@
 export class AudioMedia extends HTMLElement
 {
 
-    #audioMessage = { "volume": 0, "players": [""], "maxVolume": 100 };
+    // players have "name" (string), "playbackStatus" (Playing, Paused, Stopped) and "volume" (double ranged 0.00 to 1.00)
+    #audioMessage = { "volume": 0, "players": [], "maxVolume": 100 };
 
     volumeControl = this.querySelector("input[type=range]");
 
@@ -63,7 +64,7 @@ export class AudioMedia extends HTMLElement
         this.selectedPlayer.innerHTML = "";
         for(let player of this.#audioMessage.players)
         {
-            this.selectedPlayer.innerHTML += `<option>${player}</option>`;
+            this.selectedPlayer.innerHTML += `<option>${player.name}</option>`;
         }
     }
 }

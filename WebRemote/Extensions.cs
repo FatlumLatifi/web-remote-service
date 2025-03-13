@@ -11,7 +11,7 @@ namespace WebRemote
         public static async Task SendTextAsUTF8Async(this WebSocket ws, string message) =>
             await ws.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
 
-        public static bool HandleMessage(this WebSocket webSocket, byte[] buffer, WebSocketReceiveResult result, IWebRemoteServer server)
+        public static bool HandleMessage(this WebSocket webSocket, byte[] buffer, WebSocketReceiveResult result, IWebRemoteControl server)
         {
             if (result.CloseStatus.HasValue is false)
             {

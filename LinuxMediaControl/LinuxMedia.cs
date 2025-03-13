@@ -4,14 +4,23 @@ using WebRemote.Models;
 
 
 namespace LinuxMediaControl;
-public class LinuxMedia : IWebMedia, IDisposable
+
+public class LinuxMedia :  IMultimediaControl, IDisposable
 {
 
     public LinuxMedia()
     {
         _connection = Connection.Session;
         MediaPlayers = new();
+        
+        Task.Run(async () => await CheckMediaPlayersAsync()).GetAwaiter().GetResult();
     }
+
+    public async Task RefreshAsync()
+    {
+        await CheckMediaPlayersAsync();
+    }
+
 
     /// <summary>
     /// 
@@ -20,41 +29,49 @@ public class LinuxMedia : IWebMedia, IDisposable
     public async Task<int> CheckMediaPlayersAsync()
     {
         string[]? services;
-        try { services = await _connection.ListServicesAsync();} 
+        try { services = await _connection.ListServicesAsync(); } 
         catch { return 0; }
         int count = 0;
+        MediaPlayers.Clear();
         if (services is not null)
         {
             foreach(string service in services)
             {
-                
                 if (service.StartsWith("org.mpris.MediaPlayer2."))
                 {
-                   var mediaPlayerRoot = _connection.CreateProxy<IMediaPlayerRoot>(service, "/org/mpris/MediaPlayer2");
+                   IMediaPlayerRoot mediaPlayerRoot = _connection.CreateProxy<IMediaPlayerRoot>(service, "/org/mpris/MediaPlayer2");
                    string identity = await mediaPlayerRoot.GetAsync<string>("Identity");
-                    {
-                        
-                        MediaPlayers.Add(new (identity, _connection.CreateProxy<IMediaPlayer>(service, "/org/mpris/MediaPlayer2")));
-                    }
-                    count++;
+                   LinuxMediaPlayer mediaPlayer = new(_connection.CreateProxy<IMediaPlayer>(service, "/org/mpris/MediaPlayer2"));
+                   double volume = 1.00;
+                   try { volume = await mediaPlayer._mediaPlayer.GetAsync<double>("Volume"); } catch { }
+                   
+                   MediaPlayers.Add(new(identity, mediaPlayer) 
+                   { 
+                    playbackStatus = await mediaPlayer._mediaPlayer.GetAsync<string?>("PlaybackStatus") ?? "Playing..",
+                    volume = volume
+                    });
+                    
+                   count++;
                 }
             }
             SelectedMediaPlayer = count - 1;
         }
         return count;
     }
+
+
   
     private Connection _connection;
-    public List<(string, IMediaPlayer)> MediaPlayers;
+    public List<WebRemotePlayer> MediaPlayers;
 
     private int SelectedMediaPlayer;
-    
+    IWebMedia? IMultimediaControl.SelectedMediaPlayer => MediaPlayers[SelectedMediaPlayer].WebMedia;
 
     public bool ChangeSelectedMediaPlayer(string name)
     {
         for(int i = 0; i < MediaPlayers.Count; i++)
         {
-            if (name.Equals(MediaPlayers[i].Item1, StringComparison.InvariantCultureIgnoreCase))
+            if (name.Equals(MediaPlayers[i].name, StringComparison.InvariantCultureIgnoreCase))
             {
                 SelectedMediaPlayer = i;
                 return true;
@@ -68,59 +85,12 @@ public class LinuxMedia : IWebMedia, IDisposable
     public AudioRemoteMessage GetAudioMessage()
     {
         AudioControl Audio = new();
-        AudioRemoteMessage message = new(Audio.Volume, MediaPlayers.Select(players=> players.Item1).ToArray());
+        AudioRemoteMessage message = new(Audio.Volume, MediaPlayers);
         Audio.Dispose();
         return message;
     }
 
 
-    public string? GetPlaybackStatus(IMediaPlayer player)
-    {
-        return GetPlaybackStatusAsync(player).Result;
-    }
-
-    public async Task<string?> GetPlaybackStatusAsync(IMediaPlayer player) => await player.GetAsync<string?>("PlaybackStatus");
-    
-
-    public async void Next()
-    {
-        if (MediaPlayers[SelectedMediaPlayer].Item2 is null)
-        {
-          SelectedMediaPlayer = 0;
-          if (MediaPlayers[SelectedMediaPlayer].Item2 is null) { return; }
-        }
-        await MediaPlayers[SelectedMediaPlayer].Item2.NextAsync();
-    }
-
-    public async void PlayPause()
-    {
-          if (MediaPlayers[SelectedMediaPlayer].Item2 is null)
-        {
-          SelectedMediaPlayer = 0;
-          if (MediaPlayers[SelectedMediaPlayer].Item2 is null) { return; }
-        }
-        await MediaPlayers[SelectedMediaPlayer].Item2.PlayPauseAsync();
-    }
-
-    public async void Previous()
-    {
-           if (MediaPlayers[SelectedMediaPlayer].Item2 is null)
-        {
-          SelectedMediaPlayer = 0;
-          if (MediaPlayers[SelectedMediaPlayer].Item2 is null) { return; }
-        }
-        await MediaPlayers[SelectedMediaPlayer].Item2.PreviousAsync();
-    }
-
-    public async void Stop()
-    {
-           if (MediaPlayers[SelectedMediaPlayer].Item2 is null)
-        {
-          SelectedMediaPlayer = 0;
-          if (MediaPlayers[SelectedMediaPlayer].Item2 is null) { return; }
-        }
-        await MediaPlayers[SelectedMediaPlayer].Item2.StopAsync();
-    }
     public void SetVolume([Range(0, 100)] int value)
     {
         AudioControl Audio = new();

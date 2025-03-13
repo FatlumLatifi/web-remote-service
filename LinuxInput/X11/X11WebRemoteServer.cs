@@ -4,7 +4,7 @@ using WebRemote.Models;
 
 namespace LinuxInput.X11;
 
-public class X11WebRemoteServer : IWebRemoteServer
+public class X11WebRemoteServer : IWebRemoteControl
 {
     private IntPtr _xdo;
 
