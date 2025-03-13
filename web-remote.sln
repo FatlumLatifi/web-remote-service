@@ -1,4 +1,4 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -13,8 +13,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSample", "WebSample\WebSample.csproj", "{DBAF4D37-B744-8F32-8555-CCD1463D60D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRemoteService", "WebRemoteService\WebRemoteService.csproj", "{8028AB65-E612-B066-C38A-439F522DDCAF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{6B7B7DF6-EED5-4202-86DD-6E218894E55D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,15 +44,11 @@ Global
 		{8028AB65-E612-B066-C38A-439F522DDCAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8028AB65-E612-B066-C38A-439F522DDCAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8028AB65-E612-B066-C38A-439F522DDCAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B7B7DF6-EED5-4202-86DD-6E218894E55D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B7B7DF6-EED5-4202-86DD-6E218894E55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B7B7DF6-EED5-4202-86DD-6E218894E55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B7B7DF6-EED5-4202-86DD-6E218894E55D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {667CE8D2-61FA-431D-AC74-83E01D1D53E7}
+		SolutionGuid = {F5A404D7-66D6-4935-BE04-EDC5D1F39AD8}
 	EndGlobalSection
 EndGlobal
