@@ -50,7 +50,6 @@ public class LinuxMedia :  IMultimediaControl, IDisposable
                     playbackStatus = await mediaPlayer._mediaPlayer.GetAsync<string?>("PlaybackStatus") ?? "Playing..",
                     volume = volume
                     });
-                    
                    count++;
                 }
             }
