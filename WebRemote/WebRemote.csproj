@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,6 +10,7 @@
     <ProjectReference Include="..\LinuxInput\LinuxInput.csproj" />
     <ProjectReference Include="..\WebRemote.Models\WebRemote.Models.csproj" />
     <ProjectReference Include="..\LinuxMediaControl\LinuxMediaControl.csproj" />
+    <ProjectReference Include="..\WindowsInput\WindowsInputRemote.csproj" />
   </ItemGroup>
 
   <ItemGroup>

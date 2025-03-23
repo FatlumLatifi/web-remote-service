@@ -11,7 +11,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Http; // Add this directive
+using Microsoft.AspNetCore.Http;
+using System.Runtime.InteropServices;
+using WindowsInputRemote;
+// Add this directive
 
 public static class WebRemoteApplication
 {
@@ -21,8 +24,20 @@ public static class WebRemoteApplication
         {
             builder = WebApplication.CreateBuilder();
         }
-        builder.Services.AddSingleton<IMultimediaControl, LinuxMedia>();
-        builder.Services.AddSingleton<IWebRemoteControl, X11WebRemoteServer>();
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            builder.Services.AddSingleton<IMultimediaControl, WindowsMedia>();
+            builder.Services.AddSingleton<IWebRemoteControl, WindowsControl>();
+
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            builder.Services.AddSingleton<IMultimediaControl, LinuxMedia>();
+            builder.Services.AddSingleton<IWebRemoteControl, X11WebRemoteServer>();
+        }
+
+
 
         var app = builder.Build();
         app.UseStaticFiles();
