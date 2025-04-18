@@ -1,4 +1,5 @@
-import { WebRemoteMessage, WebRemote } from "./main.js";
+import { WebRemoteMessage } from "./main.js";
+import { WebRemote } from './webremote.js';
 
 export class TouchPad extends HTMLElement 
 {

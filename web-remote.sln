@@ -4,8 +4,6 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinuxInput", "LinuxInput\LinuxInput.csproj", "{C35022B1-9D57-DD82-A215-AA693A36310C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinuxMediaControl", "LinuxMediaControl\LinuxMediaControl.csproj", "{178A1416-F562-018A-A3D2-8D2CB2D1395F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRemote", "WebRemote\WebRemote.csproj", "{5704C798-EAAA-5C7D-2608-97514DC92443}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRemote.Models", "WebRemote.Models\WebRemote.Models.csproj", "{C5667D65-6849-524E-D5E1-00AF80244135}"
@@ -26,10 +24,6 @@ Global
 		{C35022B1-9D57-DD82-A215-AA693A36310C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C35022B1-9D57-DD82-A215-AA693A36310C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C35022B1-9D57-DD82-A215-AA693A36310C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{178A1416-F562-018A-A3D2-8D2CB2D1395F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{178A1416-F562-018A-A3D2-8D2CB2D1395F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{178A1416-F562-018A-A3D2-8D2CB2D1395F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{178A1416-F562-018A-A3D2-8D2CB2D1395F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5704C798-EAAA-5C7D-2608-97514DC92443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5704C798-EAAA-5C7D-2608-97514DC92443}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5704C798-EAAA-5C7D-2608-97514DC92443}.Release|Any CPU.ActiveCfg = Release|Any CPU

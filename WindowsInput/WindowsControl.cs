@@ -1,5 +1,3 @@
-
-
 using System.Windows.Input;
 using WebRemote.Models;
 using WindowsInput;

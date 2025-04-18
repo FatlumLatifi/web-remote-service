@@ -22,8 +22,6 @@
     </Content>
   
     <RpmDotNetDependency Remove="@(RpmDotNetDependency)" />
-    <RpmDotNetDependency Include="libasound2" />
-    <RpmDotNetDependency Include="dbus-sharp" />
     <RpmDotNetDependency Include="xdotool-devel" />
   </ItemGroup>
 

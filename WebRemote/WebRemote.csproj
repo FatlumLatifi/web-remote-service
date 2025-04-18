@@ -6,11 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+  <DefineConstants>WINDOWS</DefineConstants>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+  <DefineConstants>LINUX</DefineConstants>
+</PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LinuxInput\LinuxInput.csproj" />
     <ProjectReference Include="..\WebRemote.Models\WebRemote.Models.csproj" />
-    <ProjectReference Include="..\LinuxMediaControl\LinuxMediaControl.csproj" />
-    <ProjectReference Include="..\WindowsInput\WindowsInputRemote.csproj" />
+    <ProjectReference Include="..\WindowsInput\WindowsInput.csproj" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
   </ItemGroup>
 
   <ItemGroup>
