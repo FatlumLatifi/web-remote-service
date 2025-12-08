@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="LinuxInput/LinuxInput.csproj" />
+  <Project Path="WebRemote.Models/WebRemote.Models.csproj" />
+  <Project Path="WebRemote/WebRemote.csproj" />
+  <Project Path="WebRemoteService/WebRemoteService.csproj" />
+  <Project Path="WebSample/WebSample.csproj" />
+  <Project Path="WindowsInput/WindowsInputRemote.csproj" />
+</Solution>
