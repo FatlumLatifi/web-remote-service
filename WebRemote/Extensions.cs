@@ -6,12 +6,12 @@ using WebRemote.Models;
 
 namespace WebRemote
 {
-    public static class WebSocketExtensions
+    internal static class WebSocketExtensions
     {
-        public static async Task SendTextAsUTF8Async(this WebSocket ws, string message) =>
+        internal static async Task SendTextAsUTF8Async(this WebSocket ws, string message) =>
             await ws.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
 
-        public static bool HandleWebRemoteMessage(this WebSocket webSocket, ReadOnlySpan<byte> buffer, WebSocketReceiveResult result, IWebRemoteControl server)
+        internal static bool HandleWebRemoteMessage(this WebSocket webSocket, ReadOnlySpan<byte> buffer, WebSocketReceiveResult result, IWebRemoteControl server)
         {
             if (result.CloseStatus.HasValue is false)
             {

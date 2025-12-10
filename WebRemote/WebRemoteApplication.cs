@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using System.Runtime.InteropServices;
 
-public static class WebRemoteApplication
+public class WebRemoteApplication
 {
     public static WebApplication CreateWebApplication(WebApplicationBuilder? builder)
     {

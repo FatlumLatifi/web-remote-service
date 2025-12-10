@@ -23,6 +23,8 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
+	
+	
   <ItemGroup>
     <Content Include="wwwroot\**\*" LinuxFileMode="1755">
       <LinuxPath>/usr/share/web-remote/wwwroot</LinuxPath>

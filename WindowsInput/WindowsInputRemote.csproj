@@ -9,7 +9,6 @@
 
   <ItemGroup>
 	  <PackageReference Include="InputSimulatorPlus" Version="1.0.7" />
-	  <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>
