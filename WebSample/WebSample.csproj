@@ -15,6 +15,8 @@
     <Nullable>enable</Nullable>
         <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
+	  <InvariantGlobalization>true</InvariantGlobalization>
+
   </PropertyGroup>
 
 

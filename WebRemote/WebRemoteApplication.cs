@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using WebRemote;
 using WebRemote.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
-using System.Runtime.InteropServices;
+using WindowsInputRemote;
 
 public class WebRemoteApplication
 {
@@ -22,16 +23,16 @@ builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsContr
 builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServer>();
 #endif
 
-        // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        // {
-        //     builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
-        // }
-        // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        // {
-        //     builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServer>();
-        // }
+                // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                // {
+                //     builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
+                // }
+                // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                // {
+                //     builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServer>();
+                // }
 
-        WebApplication app = builder.Build();
+                WebApplication app = builder.Build();
         app.UseStaticFiles();
         app.UseDefaultFiles();
         app.UseWebSockets();
@@ -43,13 +44,20 @@ builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServ
                 using var webSocket = await context.WebSockets.AcceptWebSocketAsync().WaitAsync(ct);
                 Console.WriteLine("Accepted connection");
                 byte[] buffer = new byte[128];
+                bool shouldReRead;
             reread:
                 if (webSocket.State is not WebSocketState.Open) { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, null, ct); webSocket.Dispose(); return; }
                 try
                 {
                     WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, ct); // System.Threading.CancellationToken.None);
-                    bool shouldReRead = webSocket.HandleWebRemoteMessage(buffer, result, webRemoteServer);
+                    shouldReRead = webSocket.HandleWebRemoteMessage(buffer, result, webRemoteServer);
+
                     if (shouldReRead) { goto reread; }
+                }
+                catch (OperationCanceledException)
+                {
+                    // host is shutting down (or request was aborted) — close the socket
+                    try { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "Server shutting down", CancellationToken.None); } catch { }
                 }
                 catch (Exception ex)
                 {
@@ -61,6 +69,13 @@ builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServ
 
         });
         app.MapFallbackToFile("{**path:nonfile}", "index.html");
+
+
+#if WINDOWS
+        WebRemoteWindowsTray.InitializeTray(exitAction: () => app.StopAsync());
+#endif
+
+
         return app;
     }
 }
