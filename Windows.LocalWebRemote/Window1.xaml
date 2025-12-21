@@ -34,8 +34,13 @@
             <Label Content="Local Web Remote" Grid.Column="0" 
                     Foreground="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"
                    FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border Grid.Column="1" Style="{StaticResource BorderButton}"
-        VerticalAlignment="Center"
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border  Style="{StaticResource BorderButton}"
+        VerticalAlignment="Bottom"
         HorizontalAlignment="Stretch"
         CornerRadius="8"
         BorderThickness="2"
@@ -44,17 +49,15 @@
         BorderBrush="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
         MouseDown="SvgRunningStatusButtonDown" ToolTip="Turn it on/off">
                 <Viewbox VerticalAlignment="Center" HorizontalAlignment="Stretch" >
-                 
-                        <Path x:Name="PathStatus" VerticalAlignment="Stretch" 
+                    <Path x:Name="PathStatus" VerticalAlignment="Stretch" 
                       HorizontalAlignment="Stretch" StrokeDashCap="Round"  
                       Fill="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
-                      Data="{Binding SvgDataRunningStatus}"
-                          
+                      Data="{Binding SvgDataRunningStatus}" 
                       Stretch="Uniform" />      
-                    
-                    
                 </Viewbox>
-            </Border>
+                </Border>
+                <TextBlock MouseDown="SvgRunningStatusButtonDown" Grid.Row="1" FontSize="12" HorizontalAlignment="Center" x:Name="StartHint" Text="Click to Start ▲" />
+            </Grid>
 
         </Grid>
         <Grid Grid.Row="1" Grid.Column="0" Margin="20">
