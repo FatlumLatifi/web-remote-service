@@ -6,7 +6,7 @@ export class TouchPad extends HTMLElement
     constructor() { super(); };
     #startNoMove = false;
     #message = new WebRemoteMessage("", true, false);
-    static sensitivity = Number.parseFloat(localStorage.getItem("mouse-sensitivity") ?? "1");
+    static sensitivity = Number.parseFloat(localStorage.getItem("mouse-sensitivity") ?? "2");
     #lastStart = { x: 0, y: 0 };
 
     connectedCallback() 

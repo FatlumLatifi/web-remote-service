@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
+using WebRemote;
 
 namespace ServiceRelease;
 
@@ -16,7 +17,7 @@ public class Worker : BackgroundService
         var webBuilder = WebApplication.CreateSlimBuilder();
         webBuilder.Logging.ClearProviders();
         webBuilder.Logging.AddProvider(new OwnLogger(logger));
-        _webApp = WebRemoteApplication.CreateWebApplication(null);
+        _webApp = WebRemoteApplication.CreateWebApplication(null, null);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

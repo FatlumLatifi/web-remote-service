@@ -1,3 +1,3 @@
 ﻿using WebRemote;
 
-WebRemoteApplication.CreateWebApplication(null).Run();
+WebRemoteApplication.CreateWebApplication(null,null).Run();
