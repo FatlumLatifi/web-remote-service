@@ -15,6 +15,8 @@ namespace Windows.LocalWebRemote
     {
         static NotifyIcon _trayIcon = new();
 
+        #region local web remote management
+
         // lightweight async lock so we can await Start/Stop without blocking the UI thread
         static readonly SemaphoreSlim _webAppLock = new(1, 1);
 
@@ -65,11 +67,13 @@ namespace Windows.LocalWebRemote
             }
         }
 
+        #endregion\
+
 
         [STAThread]
         static void Main()
         {
-            _trayIcon.Icon = SystemIcons.Error;
+            _trayIcon.Icon = new Icon("wwwroot/favicon.ico");
             _trayIcon.Visible = true;
             _trayIcon.Text = "Local WebRemote";
 

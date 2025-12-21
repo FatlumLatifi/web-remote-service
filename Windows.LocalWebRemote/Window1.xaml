@@ -6,23 +6,16 @@
         xmlns:local="clr-namespace:Windows.LocalWebRemote"
         mc:Ignorable="d"
         Title="Window" Height="400" Width="800"
-         Background="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+        WindowStyle="SingleBorderWindow"
+        Background="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
         Foreground="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}" >
     <Window.Resources>
-        <Style TargetType="Label">
-            <Setter Property="FontWeight" Value="ExtraBold" />
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontWeight" Value="ExtraBold" />
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Height" Value="40" /> 
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SomeStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+       
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -41,12 +34,28 @@
             <Label Content="Local Web Remote" Grid.Column="0" 
                     Foreground="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"
                    FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Path x:Name="PathStatus" VerticalAlignment="Center"  HorizontalAlignment="Stretch" Grid.Column="1" Margin="5" StrokeDashCap="Round" StrokeThickness="5" 
-                  Fill="Transparent"
-                  Stroke="White"
-                  Data="{Binding SvgDataRunningStatus}"
-                  MouseDown="SvgRunningStatusButtonDown"
-                  Stretch="Uniform" />
+            <Border Grid.Column="1" Style="{StaticResource BorderButton}"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Stretch"
+        CornerRadius="8"
+        BorderThickness="2"
+        Padding="6"
+        Background="Transparent"
+        BorderBrush="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
+        MouseDown="SvgRunningStatusButtonDown" ToolTip="Turn it on/off">
+                <Viewbox VerticalAlignment="Center" HorizontalAlignment="Stretch" >
+                 
+                        <Path x:Name="PathStatus" VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Stretch" StrokeDashCap="Round"  
+                      Fill="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
+                      Data="{Binding SvgDataRunningStatus}"
+                          
+                      Stretch="Uniform" />      
+                    
+                    
+                </Viewbox>
+            </Border>
+
         </Grid>
         <Grid Grid.Row="1" Grid.Column="0" Margin="20">
             <Grid.ColumnDefinitions>
@@ -60,7 +69,18 @@
             <Label Grid.Row="0" Grid.Column="0" Content="IP"   />
             <Label Name="IpLabel" Grid.Row="0" Margin="0,0,20,0" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Stretch"   />
             <Label Grid.Row="1" Grid.Column="0" Content="Port" IsEnabled="False"  />
-            <TextBox Grid.Row="1" Name="PortBox" Margin="0,0,100,0" Grid.Column="1" MaxLength="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox Name="PortBox"  MaxLength="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <Viewbox x:Name="PortChangeSubmit" MouseDown="PortChangeSubmit_MouseDown" Style="{StaticResource SubmitSVG}" Grid.Column="1" Height="40" Margin="10,0" VerticalAlignment="Center" >
+                   
+                    <Path Data="M12,2 C17.5228,2 22,6.47715 22,12 C22,17.5228 17.5228,22 12,22 C6.47715,22 2,17.5228 2,12 C2,6.47715 6.47715,2 12,2 Z M15.5354,8.38136 L10.5856,13.3311 L8.46431,11.2098 C8.07379,10.8193 7.44063,10.8193 7.0501,11.2098 C6.65958,11.6003 6.65958,12.2335 7.0501,12.624 L9.80782,15.3817 C10.2374,15.8113 10.9339,15.8113 11.3635,15.3817 L16.9496,9.79557 C17.3401,9.40505 17.3401,8.77188 16.9496,8.38136 C16.5591,7.99083 15.9259,7.99083 15.5354,8.38136 Z" 
+                         Fill="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                </Viewbox>
+            </Grid >
         </Grid>
         <Image x:Name="ImageBox" Margin="15" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"/>
     </Grid>
