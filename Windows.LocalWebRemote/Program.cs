@@ -77,14 +77,13 @@ namespace Windows.LocalWebRemote
             _trayIcon.Visible = true;
             _trayIcon.Text = "Local WebRemote";
 
-            // Optional: Add a context menu
             _trayIcon.ContextMenuStrip = new ContextMenuStrip();
             _trayIcon.ContextMenuStrip.Items.Add("Start WebRemote", null, async (s, e) => await StartLocalWebRemoteAsync());
             _trayIcon.ContextMenuStrip.Items.Add("Stop WebRemote", null, async (s, e) => await StopLocalWebRemoteAsync());
             _trayIcon.ContextMenuStrip.Items.Add("Settings", null, async (_, _) => await OpenSettingsAsync());
             _trayIcon.ContextMenuStrip.Items.Add("Exit", null, (s, e) => Application.Exit());
 
-            // Ensure the web app is stopped when the application exits.
+            // Ensures the web app is stopped when the application exits.
             Application.ApplicationExit += async (sender, args) =>
             {
                 try {  await StopLocalWebRemoteAsync(); }
@@ -104,7 +103,7 @@ namespace Windows.LocalWebRemote
         internal static async Task OpenSettingsAsync()
         {
            Window1 settings = new Window1(WebRemoteApplication.GetDefaultEndPoint(Settings.Default.Port));
-            // make this event handler async so Start/Stop won't block the UI thread
+            //  this event handler is async so Start/Stop won't block the UI thread
             settings.LocalWebRemoteStartStop += async (_, _) =>
             {
                 if (Window1.IsLocalWebRemoteRunning)
