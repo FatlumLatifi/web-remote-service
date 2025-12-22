@@ -1,3 +1,6 @@
 */bin
 */obj
 .vs
+/Windows.LocalWebRemote.AppPackager/Windows.LocalWebRemote.AppPackager.wapproj
+/WIndows.LocalWebRemote.StorePackage
+/Windows.LocalWebRemote.AppPackager
