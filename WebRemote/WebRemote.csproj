@@ -3,9 +3,7 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
-    <NeutralResourcesLanguage>de</NeutralResourcesLanguage>
-    <InvariantGlobalization>true</InvariantGlobalization>
+   
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">

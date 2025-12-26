@@ -10,6 +10,8 @@ namespace Windows.LocalWebRemote
     {
         static NotifyIcon _trayIcon = new();
 
+        static Window1? _settingsWindow;
+
         #region local web remote management
 
         // lightweight async lock so we can await Start/Stop without blocking the UI thread
@@ -34,6 +36,7 @@ namespace Windows.LocalWebRemote
             finally
             {
                 Window1.IsLocalWebRemoteRunning = true;
+                _settingsWindow?.StatusSvgUpdate();
                 _webAppLock.Release();
             }
         }
@@ -58,6 +61,7 @@ namespace Windows.LocalWebRemote
             finally
             {
                 Window1.IsLocalWebRemoteRunning = false;
+                _settingsWindow?.StatusSvgUpdate();
                 _webAppLock.Release();
             }
         }
@@ -99,9 +103,16 @@ namespace Windows.LocalWebRemote
 
         internal static async Task OpenSettingsAsync()
         {
-            Window1 settings = new Window1(WebRemoteApplication.GetDefaultEndPoint(Settings.Default.Port));
+            if (_settingsWindow != null)
+            {
+                _settingsWindow.StatusSvgUpdate();
+                _settingsWindow.Close();
+                _settingsWindow = null;
+            }
+
+            _settingsWindow = new Window1(WebRemoteApplication.GetDefaultEndPoint(Settings.Default.Port));
             //  this event handler is async so Start/Stop won't block the UI thread
-            settings.LocalWebRemoteStartStop += async (_, _) =>
+            _settingsWindow.LocalWebRemoteStartStop += async (_, _) =>
             {
                 if (Window1.IsLocalWebRemoteRunning)
                 {
@@ -111,16 +122,16 @@ namespace Windows.LocalWebRemote
                 {
                     await StartLocalWebRemoteAsync(); Window1.IsLocalWebRemoteRunning = true;
                 }
-                settings.StatusSvgUpdate();
+                _settingsWindow.StatusSvgUpdate();
             };
 
-            settings.QuitApp += async (_, _) =>
+            _settingsWindow.QuitApp += async (_, _) =>
             {
                 await StopLocalWebRemoteAsync();
                 Application.Exit();
                 Process.GetCurrentProcess().Kill(); // Das ist nötig, weil Application.Exit() den app nicht beendet in dem ersten window.
             };
-            settings.ShowDialog();
+            _settingsWindow.ShowDialog();
         }
 
 

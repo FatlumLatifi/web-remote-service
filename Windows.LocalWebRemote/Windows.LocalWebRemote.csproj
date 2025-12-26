@@ -10,9 +10,13 @@
     <UseWpf>true</UseWpf>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+	  <SatelliteResourceLanguages>de-DE</SatelliteResourceLanguages>
+	  <NeutralResourcesLanguage>en-US</NeutralResourcesLanguage>
 
     <!-- Embed the exe manifest so packaging/validator sees the DPI declaration -->
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryUrl>https://github.com/FatlumLatifi/web-remote-service</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,10 +47,12 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
-	  <EmbeddedResource Update="Properties\UITexts.de.resx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <EmbeddedResource Update="Properties\UITexts.resx">
+		<EmbeddedResource Update="Properties\UITexts.de.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>UITexts.de.Designer.cs</LastGenOutput>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Properties\UITexts.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>UITexts.Designer.cs</LastGenOutput>
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
