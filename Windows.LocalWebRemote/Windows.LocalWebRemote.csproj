@@ -1,15 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <OutputType>WinExe</OutputType>
-
-	  <TargetFramework>net10.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	 <UseWindowsForms>true</UseWindowsForms>
-	  <RootNamespace>Windows.LocalWebRemote</RootNamespace>
-	  <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>Windows.LocalWebRemote</RootNamespace>
+    <UseWpf>true</UseWpf>
+    <Platforms>AnyCPU;x64</Platforms>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+
+    <!-- Embed the exe manifest so packaging/validator sees the DPI declaration -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WebRemote\WebRemote.csproj" />
@@ -21,11 +29,22 @@
 	  <PackageReference Include="QRCoder" Version="1.7.0" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Update="Properties\UITexts.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>UITexts.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Settings.Designer.cs">
 	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Settings.settings</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\UITexts.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>UITexts.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 	  <None Update="Settings.settings">

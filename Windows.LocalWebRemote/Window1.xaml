@@ -5,62 +5,61 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Windows.LocalWebRemote"
         mc:Ignorable="d"
-        Title="Window" Height="400" Width="800"
+        Title="{x:Static props:UITexts.LocalWebRemote}" Height="800" Width="400"
         WindowStyle="SingleBorderWindow"
-        Background="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-        Foreground="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}" >
+        WindowStartupLocation="CenterScreen"
+         xmlns:props="clr-namespace:Windows.LocalWebRemote.Properties"
+        Background="{DynamicResource ControlText}"
+        Foreground="{DynamicResource HighlightText}" 
+        ResizeMode="CanMinimize" 
+       
+        >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="SomeStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-       
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Content="Local Web Remote" Grid.Column="0" 
-                    Foreground="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"
-                   FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Border  Style="{StaticResource BorderButton}"
-        VerticalAlignment="Bottom"
-        HorizontalAlignment="Stretch"
-        CornerRadius="8"
-        BorderThickness="2"
-        Padding="6"
-        Background="Transparent"
-        BorderBrush="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
-        MouseDown="SvgRunningStatusButtonDown" ToolTip="Turn it on/off">
-                <Viewbox VerticalAlignment="Center" HorizontalAlignment="Stretch" >
-                    <Path x:Name="PathStatus" VerticalAlignment="Stretch" 
-                      HorizontalAlignment="Stretch" StrokeDashCap="Round"  
-                      Fill="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
-                      Data="{Binding SvgDataRunningStatus}" 
-                      Stretch="Uniform" />      
-                </Viewbox>
-                </Border>
-                <TextBlock MouseDown="SvgRunningStatusButtonDown" Grid.Row="1" FontSize="12" HorizontalAlignment="Center" x:Name="StartHint" Text="Click to Start ▲" />
-            </Grid>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <Label Content="{x:Static props:UITexts.LocalWebRemote}" Grid.Row="0" 
+                Foreground="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"
+               FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Style="{StaticResource BorderButton}" MouseDown="StartStopLocalWebRemote"
+             CornerRadius="15" Margin="15" BorderBrush="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" BorderThickness="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderBrush="{DynamicResource HighlightText}" BorderThickness="0,0,5,0" Background="{DynamicResource HighlightText}">
+                        <Viewbox>
+                            <Path x:Name="PathStatus" Fill="{DynamicResource ControlText}"
+                               Data="M225.748 9.457C64.142 29.943-33.628 196.283 27.644 346.5 69.099 448.135 173.841 510.231 282.5 497.589c156.27-18.18 255.001-173.742 205.057-323.089C458.847 88.651 382.454 24.568 292 10.456c-14.385-2.244-51.961-2.811-66.252-.999m-7.636 144.06c-17.365 4.874-31.086 18.766-35.581 36.025-1.849 7.098-2.297 116.122-.516 125.572 5.621 29.821 38.676 48.058 66.49 36.682 6.056-2.478 83.968-53.745 92.698-60.997 21.576-17.924 22.544-52.372 2.034-72.335-6.051-5.889-89.113-60.895-95.798-63.44-7.722-2.939-21.669-3.656-29.327-1.507M231 253.468c0 32.526.355 51.575.958 51.365.527-.183 18.021-11.807 38.876-25.831l37.918-25.498-36.126-24.077c-19.869-13.243-37.364-24.883-38.876-25.867l-2.75-1.79v51.698"   
+                                  />
+                        </Viewbox>
+                    </Border>
+
+                    <TextBlock Grid.Column="1" FontSize="15" x:Name="StartHint" TextWrapping="Wrap" Text="{x:Static props:UITexts.ClickToStart}"  />
+                </Grid>
+            </Border>
+            <Button Click="QuitLocalWebRemote" Grid.Column="1" Style="{StaticResource ShutdownButton}" Margin="20">
+            </Button>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="0" Margin="20">
+        <Grid Grid.Row="2"  Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="2*" />
@@ -81,10 +80,22 @@
                 <Viewbox x:Name="PortChangeSubmit" MouseDown="PortChangeSubmit_MouseDown" Style="{StaticResource SubmitSVG}" Grid.Column="1" Height="40" Margin="10,0" VerticalAlignment="Center" >
                    
                     <Path Data="M12,2 C17.5228,2 22,6.47715 22,12 C22,17.5228 17.5228,22 12,22 C6.47715,22 2,17.5228 2,12 C2,6.47715 6.47715,2 12,2 Z M15.5354,8.38136 L10.5856,13.3311 L8.46431,11.2098 C8.07379,10.8193 7.44063,10.8193 7.0501,11.2098 C6.65958,11.6003 6.65958,12.2335 7.0501,12.624 L9.80782,15.3817 C10.2374,15.8113 10.9339,15.8113 11.3635,15.3817 L16.9496,9.79557 C17.3401,9.40505 17.3401,8.77188 16.9496,8.38136 C16.5591,7.99083 15.9259,7.99083 15.5354,8.38136 Z" 
-                         Fill="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                         Fill="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}" />
                 </Viewbox>
             </Grid >
         </Grid>
-        <Image x:Name="ImageBox" Margin="15" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"/>
+        <Grid Grid.Row="3" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="{x:Static props:UITexts.UsageInstruction}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontSize="17" TextWrapping="Wrap" TextAlignment="Center"/>
+            <Image x:Name="ImageBox" Grid.Row="1" Margin="10"  />
+            <Button Grid.Row="2" Style="{StaticResource DonationButton}" Click="DonationButton_Click" />
+           
+        </Grid>
+        
     </Grid>
 </Window>

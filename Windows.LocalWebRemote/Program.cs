@@ -1,13 +1,7 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using WebRemote;
+﻿using WebRemote;
 using Microsoft.AspNetCore.Builder;
-using System.IO;
-using Microsoft.Extensions.Hosting;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace Windows.LocalWebRemote
 {
@@ -34,7 +28,7 @@ namespace Windows.LocalWebRemote
                 if (Window1.IsLocalWebRemoteRunning) return;
                 _webApp = WebRemoteApplication.CreateLocalWebRemote(Settings.Default.Port);
                 await _webApp.StartAsync();
-               
+
             }
             finally
             {
@@ -56,9 +50,9 @@ namespace Windows.LocalWebRemote
                 }
                 catch (OperationCanceledException)
                 {
-                   Console.WriteLine("Web app stop timed out.");
+                    Console.WriteLine("Web app stop timed out.");
                 }
-               
+
             }
             finally
             {
@@ -67,12 +61,14 @@ namespace Windows.LocalWebRemote
             }
         }
 
-        #endregion\
+        #endregion
 
 
         [STAThread]
         static void Main()
         {
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("de-DE");
+
             _trayIcon.Icon = new Icon("wwwroot/favicon.ico");
             _trayIcon.Visible = true;
             _trayIcon.Text = "Local WebRemote";
@@ -86,7 +82,7 @@ namespace Windows.LocalWebRemote
             // Ensures the web app is stopped when the application exits.
             Application.ApplicationExit += async (sender, args) =>
             {
-                try {  await StopLocalWebRemoteAsync(); }
+                try { await StopLocalWebRemoteAsync(); }
                 finally
                 {
                     _trayIcon.Visible = false;
@@ -94,15 +90,15 @@ namespace Windows.LocalWebRemote
                 }
             };
             OpenSettingsAsync().Wait();
-
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Application.Run();
-            
         }
+
 
 
         internal static async Task OpenSettingsAsync()
         {
-           Window1 settings = new Window1(WebRemoteApplication.GetDefaultEndPoint(Settings.Default.Port));
+            Window1 settings = new Window1(WebRemoteApplication.GetDefaultEndPoint(Settings.Default.Port));
             //  this event handler is async so Start/Stop won't block the UI thread
             settings.LocalWebRemoteStartStop += async (_, _) =>
             {
@@ -115,6 +111,13 @@ namespace Windows.LocalWebRemote
                     await StartLocalWebRemoteAsync(); Window1.IsLocalWebRemoteRunning = true;
                 }
                 settings.StatusSvgUpdate();
+            };
+
+            settings.QuitApp += async (_, _) =>
+            {
+                await StopLocalWebRemoteAsync();
+                Application.Exit();
+                Process.GetCurrentProcess().Kill();
             };
             settings.ShowDialog();
         }
