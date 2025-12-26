@@ -28,6 +28,8 @@
 	<ItemGroup>
 	  <PackageReference Include="QRCoder" Version="1.7.0" />
 	</ItemGroup>
+	
+	
 	<ItemGroup>
 	  <Compile Update="Properties\UITexts.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -41,9 +43,13 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
+	  <EmbeddedResource Update="Properties\UITexts.de.resx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	  <EmbeddedResource Update="Properties\UITexts.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>UITexts.Designer.cs</LastGenOutput>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>

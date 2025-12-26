@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 
 namespace Windows.LocalWebRemote
 {
@@ -67,9 +68,9 @@ namespace Windows.LocalWebRemote
         [STAThread]
         static void Main()
         {
-            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("de-DE");
+            // CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("de-DE"); // deutsche Sprache erzwingen zum Testen
 
-            _trayIcon.Icon = new Icon("wwwroot/favicon.ico");
+            _trayIcon.Icon = new Icon(_pathToIco);
             _trayIcon.Visible = true;
             _trayIcon.Text = "Local WebRemote";
 
@@ -117,9 +118,18 @@ namespace Windows.LocalWebRemote
             {
                 await StopLocalWebRemoteAsync();
                 Application.Exit();
-                Process.GetCurrentProcess().Kill();
+                Process.GetCurrentProcess().Kill(); // Das ist nötig, weil Application.Exit() den app nicht beendet in dem ersten window.
             };
             settings.ShowDialog();
+        }
+
+
+        internal static string _pathToIco
+        {
+            get
+            {
+               return Path.Combine(Application.StartupPath, "wwwroot", "favicon.ico");
+            }
         }
     }
 }
