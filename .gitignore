@@ -5,3 +5,5 @@
 /WIndows.LocalWebRemote.StorePackage
 /Windows.LocalWebRemote.AppPackager
 /Windows.LocalWebRemote/Properties/PublishProfiles/FolderProfile.pubxml.user
+/WebRemote/WebRemoteApplication.cs
+/WapProjTemplate1
