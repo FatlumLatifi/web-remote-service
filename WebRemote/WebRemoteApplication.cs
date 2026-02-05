@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
@@ -16,12 +17,26 @@ namespace WebRemote;
 public static class WebRemoteApplication
 {
 
-    public static readonly IPAddress? LocalIP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(a));
-
-
-   public static IPEndPoint GetDefaultEndPoint(uint port = 80)
+    internal static IPAddress GetLocalIP()
     {
-        IPAddress ip = LocalIP ?? IPAddress.Any;
+        foreach (NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())
+        {
+            IPInterfaceProperties properties = networkInterface.GetIPProperties();
+
+            foreach (UnicastIPAddressInformation address in properties.UnicastAddresses)
+            {
+                if (address.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    if (address.Address.ToString().StartsWith("192")) { return address.Address; }
+                }
+            }
+        }
+        return IPAddress.Any;
+    }
+
+    public static IPEndPoint GetDefaultEndPoint(uint port = 80)
+    {
+        IPAddress ip = GetLocalIP();
 
         return new IPEndPoint(ip, (int)port);
     }
