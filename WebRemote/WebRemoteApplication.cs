@@ -68,8 +68,6 @@ public static class WebRemoteApplication
 builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
 #elif LINUX
 builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.UinputControl>();
-Console.WriteLine("Registered uinput");
-
 #endif
 
 
