@@ -10,7 +10,6 @@ using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using WebRemote;
 using WebRemote.Models;
-using WindowsInputRemote;
 
 namespace WebRemote;
 
@@ -53,17 +52,14 @@ public static class WebRemoteApplication
 #if WINDOWS
 builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
 #elif LINUX
-builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServer>();
+builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.UinputControl>();
+Console.WriteLine("Registered uinput");
+
 #endif
 
-                // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                // {
-                //     builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
-                // }
-                // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                // {
-                //     builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServer>();
-                // }
+
+
+        
 
                 WebApplication app = builder.Build();
         app.UseStaticFiles();
@@ -80,23 +76,22 @@ builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.X11.X11WebRemoteServ
                 byte[] buffer = new byte[128];
                 bool shouldReRead;
             reread:
-                if (webSocket.State is not WebSocketState.Open) { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, null, ct); webSocket.Dispose(); return; }
+                if (webSocket.State is not WebSocketState.Open || ct.IsCancellationRequested) { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, null, ct); webSocket.Dispose(); return; }
                 try
                 {
                     WebSocketReceiveResult result = await webSocket.ReceiveAsync(buffer, ct); // System.Threading.CancellationToken.None);
                     shouldReRead = webSocket.HandleWebRemoteMessage(buffer, result, webRemoteServer);
-
                     if (shouldReRead) { goto reread; }
                 }
                 catch (OperationCanceledException)
                 {
-                    // host is shutting down (or request was aborted) — close the socket
-                    try { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "Server shutting down", CancellationToken.None); } catch { }
+                    // host is shutting down (or request was aborted) ï¿½ close the socket
+                    try { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "Server shutting down", ct); } catch { }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("WebSocket error: " + ex.Message);
-                    try { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "Server shutting down", CancellationToken.None); } catch { }
+                    try { await webSocket.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "Server shutting down", ct); } catch { }
                 }
                 Console.WriteLine("WebSocket connection closed");
 

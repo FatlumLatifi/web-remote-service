@@ -83,10 +83,10 @@ export class WebRemote extends HTMLElement {
             if (isSpecial) {
                 switch (e.key) {
                     case "Backspace":
-                        message.data = "BackSpace";
+                        message.data = "14";
                         break;
                     case "Enter":
-                        message.data = "Return";
+                        message.data = "28";
                         break;
                     case "Unidentified":
                     default:
@@ -104,7 +104,7 @@ export class WebRemote extends HTMLElement {
 
         const mouse1 = this.querySelector("#mouse1");
         mouse1.onclick = () => sendMouseClick(); // Left mouse
-        const mouse2 = this.querySelector("#mouse3");
-        mouse2.onclick = () => sendMouseClick("3"); // Right mouse
+        const mouse3 = this.querySelector("#mouse3");
+        mouse3.onclick = () => sendMouseClick("3"); // Right mouse
     }
 }

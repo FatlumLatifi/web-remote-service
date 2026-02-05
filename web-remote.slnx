@@ -11,9 +11,9 @@
   <Project Path="WebRemote/WebRemote.csproj" />
   <Project Path="WebRemoteService/WebRemoteService.csproj" />
   <Project Path="WebSample/WebSample.csproj" />
-  <Project Path="Windows.LocalWebRemote.AppPackager/Windows.LocalWebRemote.AppPackager.wapproj" Type="c7167f0d-bc9f-4e6e-afe1-012c56b48db5" Id="c9d67b6b-4f0c-4bc3-b756-eb5c05bf1e9a">
+  <!-- <Project Path="Windows.LocalWebRemote.AppPackager/Windows.LocalWebRemote.AppPackager.wapproj" Type="c7167f0d-bc9f-4e6e-afe1-012c56b48db5" Id="c9d67b6b-4f0c-4bc3-b756-eb5c05bf1e9a">
     <Deploy />
-  </Project>
+  </Project> -->
   <Project Path="Windows.LocalWebRemote/Windows.LocalWebRemote.csproj" Id="638c63be-8d79-44a2-b812-3bc6f9e16c77">
     <Platform Solution="Release|x64" Project="x64" />
   </Project>

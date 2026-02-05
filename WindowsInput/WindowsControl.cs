@@ -12,60 +12,73 @@ namespace WindowsInputRemote
 
         internal InputSimulator _input = new();
 
-        public IWebRemoteKeyboard Keyboard => new WindowsKeyboard(_input);
-
-        public IWebRemoteMouse Mouse => new WindowsMouse(_input);
 
         public void Dispose()
         {
-            
+
         }
-    }
-
-
-
-    public class WindowsKeyboard : IWebRemoteKeyboard
-    {
-        public WindowsKeyboard(InputSimulator input)
+  
+        public void SendKey(int keycode)
         {
-            _input = input;
-        }
-
-        internal InputSimulator _input;
-
-        public void SendKey(string keySequence)
-        {
-            switch (keySequence)
+            switch (keycode)
             {
-                case "Return":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.RETURN); break;
-                case "BackSpace":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.BACK); break;
-                case "XF86AudioPlay":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.MEDIA_PLAY_PAUSE); break;
-                case "XF86AudioPrev":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.MEDIA_PREV_TRACK); break;
-                case "XF86AudioNext":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.MEDIA_NEXT_TRACK); break;
-                case "XF86AudioMute":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.VOLUME_MUTE); break;
-                case "XF86AudioLowerVolume":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.VOLUME_DOWN); break;
-                case "XF86AudioRaiseVolume":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.VOLUME_UP); break;
-                case "XF86WWW":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.BROWSER_HOME); break;
-                case "XF86Copy":
-                    _input.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_C); break;
-                case "XF86AudioMedia":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.LAUNCH_MEDIA_SELECT); break;
-                case "XF86Paste":
-                    _input.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V); break;
-                case "F11":
-                    _input.Keyboard.KeyPress(VirtualKeyCode.F11); break;
-                default: return;
+                case 14:   // BackSpace
+                    _input.Keyboard.KeyPress(VirtualKeyCode.BACK);
+                    break;
+
+                case 28:   // Return
+                    _input.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                    break;
+
+                case 87:   // F11
+                    _input.Keyboard.KeyPress(VirtualKeyCode.F11);
+                    break;
+
+                case 113:  // XF86AudioMute
+                    _input.Keyboard.KeyPress(VirtualKeyCode.VOLUME_MUTE);
+                    break;
+
+                case 114:  // XF86AudioLowerVolume
+                    _input.Keyboard.KeyPress(VirtualKeyCode.VOLUME_DOWN);
+                    break;
+
+                case 115:  // XF86AudioRaiseVolume
+                    _input.Keyboard.KeyPress(VirtualKeyCode.VOLUME_UP);
+                    break;
+
+                case 133:  // XF86Copy
+                    _input.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_C);
+                    break;
+
+                case 135:  // XF86Paste
+                    _input.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+                    break;
+
+                case 150:  // XF86WWW
+                    _input.Keyboard.KeyPress(VirtualKeyCode.BROWSER_HOME);
+                    break;
+
+                case 163:  // XF86AudioNext
+                    _input.Keyboard.KeyPress(VirtualKeyCode.MEDIA_NEXT_TRACK);
+                    break;
+
+                case 164:  // XF86AudioPlay
+                    _input.Keyboard.KeyPress(VirtualKeyCode.MEDIA_PLAY_PAUSE);
+                    break;
+
+                case 165:  // XF86AudioPrev
+                    _input.Keyboard.KeyPress(VirtualKeyCode.MEDIA_PREV_TRACK);
+                    break;
+
+                case 226:  // XF86AudioMedia
+                    _input.Keyboard.KeyPress(VirtualKeyCode.LAUNCH_MEDIA_SELECT);
+                    break;
+
+                default:
+                    return;
             }
         }
+
 
         public void TypeText(string text)
         {
@@ -73,30 +86,15 @@ namespace WindowsInputRemote
             _input.Keyboard.TextEntry(text);
         }
 
- 
-    }
 
-
-   
-
-    public class WindowsMouse : IWebRemoteMouse
-    {
-
-        public WindowsMouse(InputSimulator input)
+            public void MoveBy(int x, int y)
         {
-            _input = input;
-        }
-
-        internal InputSimulator _input;
-
-        public void MoveBy(int x, int y)
-        {
-           _input.Mouse.MoveMouseBy(x, y);
+            _input.Mouse.MoveMouseBy(x, y);
         }
 
         public void SendClick(int button)
         {
-           switch (button)
+            switch (button)
             {
                 case 1:
                     _input.Mouse.LeftButtonClick();

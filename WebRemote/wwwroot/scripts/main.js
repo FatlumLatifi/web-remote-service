@@ -29,3 +29,4 @@ export class WebRemoteMessage {
     };
     get jsonString() { return JSON.stringify(this); }
 }
+

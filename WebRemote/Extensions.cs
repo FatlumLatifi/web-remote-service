@@ -25,7 +25,7 @@ namespace WebRemote
                           if (wrm.isSpecial)
                            {
                             int button = int.Parse(wrm.data);
-                            server.Mouse.SendClick(button);
+                            server.SendClick(button);
                             return true;
                            }
                            else
@@ -33,7 +33,8 @@ namespace WebRemote
                             string[] xy = wrm.data.Split(',', 2, StringSplitOptions.None);
                             int x = int.Parse(xy[0]);
                             int y = int.Parse(xy[1]);
-                            server.Mouse.MoveBy(x, y);
+                            server.MoveBy(x, y);
+                            Console.WriteLine($"Moved by {x} and {y}");
                             return true;
                            }
                         }
@@ -42,12 +43,14 @@ namespace WebRemote
                            
                             if (wrm.isSpecial)
                             {
-                                    server.Keyboard.SendKey(wrm.data);
+                                server.SendKey(int.Parse(wrm.data));
+                                Console.WriteLine($"Handled special key: {wrm.data}");
                                 return true;
                             }
                             else
                             {
-                                server.Keyboard.TypeText(wrm.data);
+                                server.TypeText(wrm.data);
+                                Console.WriteLine($"Handled text: {wrm.data}");
                                 return true;
                             }  
                         }
