@@ -132,7 +132,7 @@ namespace Linux.LocalWebRemote
         internal static IPEndPoint _ipEndP;
 
 
-        static void LoadConfiguration()
+        public static void LoadConfiguration()
         {
             if (File.Exists("appsettings.json") is false)
             {

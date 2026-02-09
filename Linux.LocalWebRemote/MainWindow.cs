@@ -38,7 +38,7 @@ namespace Linux.LocalWebRemote
 
 
             QuitButton?.Clicked += delegate { Gtk.Application.Quit(); };
-            SaveButton?.Clicked += delegate { Program.WriteConfig(uint.Parse(PortInput?.Text ?? "5031")); };
+            SaveButton?.Clicked += delegate { Program.WriteConfig(uint.Parse(PortInput?.Text ?? "5031")); LocalWebRemoteEndPoint = Program._ipEndP;  };
 
             PortInput?.KeyPressEvent += (o, args) =>
             {
@@ -112,6 +112,7 @@ namespace Linux.LocalWebRemote
 
         public void SetStartStopButton()
         {
+
               if (Program.IsLocalWebRemoteRunning is false)
                 {
                    
@@ -123,6 +124,25 @@ namespace Linux.LocalWebRemote
                     StartButton?.Label = $"Stop";
                     StartButton?.Image = new Image(Stock.MediaStop, IconSize.Button);
                 }
+        }
+
+
+        private void SavePortButton()
+        {
+            
+            bool parseResult = uint.TryParse(PortInput?.Text, out uint portValue);
+            if (parseResult is false || portValue is < 1 or > 65535)
+            {
+                Gtk.Window win = new Gtk.Window("Invalid Port");
+                win.SetDefaultSize(300, 200);
+                var label = new Label("Please enter a valid port number(integer) between 1 and 65535.");
+                win.Add(label);
+                win.ShowAll();
+                return;
+            }
+            Program.WriteConfig(portValue);
+            Program.LoadConfiguration();
+            LocalWebRemoteEndPoint = Program._ipEndP;
         }
         
     }
