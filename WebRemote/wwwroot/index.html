@@ -164,6 +164,14 @@
     <script type="module">
         import { registerAllCustomElements } from './scripts/main.js';
         registerAllCustomElements();
+
+        
+         function preventDefault(e) { e.preventDefault(); }
+
+        // Stop mouse wheel and touch move
+        window.addEventListener('wheel', preventDefault, { passive: false });
+        window.addEventListener('touchmove', preventDefault, { passive: false });
+        document.addEventListener('touchmove', preventDefault, { passive: false });
     </script>
 </body>
 

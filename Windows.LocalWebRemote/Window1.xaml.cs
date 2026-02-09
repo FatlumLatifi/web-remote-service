@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Windows.LocalWebRemote.Properties;
+using WebRemote;
 
 namespace Windows.LocalWebRemote
 {
@@ -25,9 +26,7 @@ namespace Windows.LocalWebRemote
         public IPEndPoint LocalWebRemoteEndPoint { get { return field; }
             set
             {
-                string localWebRemoteUrl;
-                if (value.Port != 80) { localWebRemoteUrl = $"http://{value.Address}:{value.Port}/"; }
-                else { localWebRemoteUrl = $"http://{value.Address}/"; }
+                string localWebRemoteUrl = value.ToHttpUrl();
 
                 IpLabel.Content = localWebRemoteUrl;
                 var qrGen = new PayloadGenerator.Url(localWebRemoteUrl);

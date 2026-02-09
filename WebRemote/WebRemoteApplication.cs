@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net;
@@ -63,18 +64,35 @@ public static class WebRemoteApplication
             });
         }
         
-
-#if WINDOWS
-builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
-#elif LINUX
-builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.UinputControl>();
-#endif
+        return CreateFromWebBuilder(builder);
+    }
 
 
+    public static WebApplication CreateFromConfiguration(IConfiguration config)
+    {
+        try 
+        {
+            WebApplicationBuilder builder = WebApplication.CreateBuilder();
+            builder.Configuration.AddConfiguration(config);
+            return CreateFromWebBuilder(builder);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error creating web application from configuration: " + ex.Message);
+            throw;
+        }
+    }
 
-        
 
-                WebApplication app = builder.Build();
+    internal static WebApplication CreateFromWebBuilder(WebApplicationBuilder builder)
+    {
+        #if WINDOWS
+            builder.Services.AddSingleton<IWebRemoteControl, WindowsInputRemote.WindowsControl>();
+        #elif LINUX
+            builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.UinputControl>();
+        #endif
+
+        WebApplication app = builder.Build();
         app.UseStaticFiles();
         app.UseDefaultFiles();
         app.UseWebSockets();
@@ -112,12 +130,6 @@ builder.Services.AddSingleton<IWebRemoteControl, LinuxInput.UinputControl>();
             }
         });
         app.MapFallbackToFile("{**path:nonfile}", "index.html");
-
-
-//#if WINDOWS
-      // WebRemoteWindowsTray.InitializeTray(exitAction: () => app.StopAsync());
-//#endif
-
 
         return app;
     }

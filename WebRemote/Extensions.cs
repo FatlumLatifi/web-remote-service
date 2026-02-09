@@ -1,4 +1,5 @@
 
+using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -34,7 +35,7 @@ namespace WebRemote
                             int x = int.Parse(xy[0]);
                             int y = int.Parse(xy[1]);
                             server.MoveBy(x, y);
-                            Console.WriteLine($"Moved by {x} and {y}");
+                           // Console.WriteLine($"Moved by {x} and {y}");
                             return true;
                            }
                         }
@@ -44,13 +45,13 @@ namespace WebRemote
                             if (wrm.isSpecial)
                             {
                                 server.SendKey(int.Parse(wrm.data));
-                                Console.WriteLine($"Handled special key: {wrm.data}");
+                              //  Console.WriteLine($"Handled special key: {wrm.data}");
                                 return true;
                             }
                             else
                             {
                                 server.TypeText(wrm.data);
-                                Console.WriteLine($"Handled text: {wrm.data}");
+                               // Console.WriteLine($"Handled text: {wrm.data}");
                                 return true;
                             }  
                         }
@@ -61,7 +62,26 @@ namespace WebRemote
         }
       
     }
+
+
+    /// <summary>
+    /// Extension helpers for <see cref="IPEndPoint"/>.
+    /// </summary>
+    public static class IPEndPointExtensions
+    {
+
+        public static string ToHttpUrl(this IPEndPoint value)
+        {
+             if (value.Port != 80) { return $"http://{value.Address}:{value.Port}/"; }
+                else { return $"http://{value.Address}/"; }
+        }
+
+    }
+    
+    
 }
+
+
 
 
 

@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="10.0.0" />
   </ItemGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\WebRemote\WebRemote.csproj" />
     <Content Include="web-remote.service" CopyToPublishDirectory="PreserveNewest" LinuxFileMode="1755">
@@ -29,7 +30,7 @@
     </Content>
   
     <RpmDotNetDependency Remove="@(RpmDotNetDependency)" />
-    <RpmDotNetDependency Include="xdotool-devel" />
+    <RpmDotNetDependency Include="libc" />
   </ItemGroup>
 
  
